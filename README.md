@@ -16,7 +16,7 @@ This walkthrough consists of three parts:
 2. 🖉CRC Path 2: Configuring a GitHub Actions workflow
 3. 🖉CRC Part 3: Creating an Azure VM for the API
 
-*Happy reading and deploying!* 
+Happy reading and coding! 
 
 >**Important note:**
 >Please be aware that this repository does not include my actual resume or any Azure Terraform provider configurations. It serves as a sanitized version of a private repository originally created for the challenge, with all personal and sensitive information removed. However, all code and documentation included in this repository are actual and accurately reflect the efforts and methodologies I applied during the project.
