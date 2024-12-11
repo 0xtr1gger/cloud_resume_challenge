@@ -173,17 +173,18 @@ tree -L .
 ```
 .
 ├── README.md
-├── src
-│   └── static
-│       ├── index.html
-│       └── styles.css
+└── src
+    └── static
+        ├── index.html
+        └── styles.css
 ```
 
 You may want to take a look into the template of an HTML/CSS CV given in this repository:
 
-- [`index.html`]
-- [`styles.css`]
+- [`index.html`](https://github.com/0xtr1gger/cloud_resume_challenge/blob/main/src/static/index.html)
+- [`styles.css`](https://github.com/0xtr1gger/cloud_resume_challenge/blob/main/src/static/styles.css)
 
+Again, this is not my real CV, of course. For the sake of privacy, I removed personal information, my background, and skills, except those used in this project. Read the note in the [introduction](https://github.com/0xtr1gger/cloud_resume_challenge/tree/main#series-overview).
 
 ## Provisioning cloud infrastructure with Terraform
 
