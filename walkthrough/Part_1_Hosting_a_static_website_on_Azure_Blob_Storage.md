@@ -214,6 +214,8 @@ The project structure will look like this:
         └── variables.tf
 ```
 
+[Here](https://github.com/0xtr1gger/cloud_resume_challenge/tree/main/terraform/static_website) is the directory where all the configuration file templates are located. 
+
 Here is an overview of the configuration files:
 
 - `main.tf`
@@ -225,6 +227,7 @@ Here is an overview of the configuration files:
 
 - `outputs.tf`
 	- This file declares output variables, i.e., the values that Terraform will display upon completion of the `terraform apply` operation.
+
 
 >It is possible to place all the configuration blocks, including resource definitions, input variables, and output variables, into a single file, say, `main.tf`. However, managing such configuration becomes challenging as the infrastructure becomes more complex; therefore, this solution is impractical for scalability and portability. 
 >This is why it is better to split Terraform configuration into several files.
