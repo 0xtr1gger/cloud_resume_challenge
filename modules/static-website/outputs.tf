@@ -20,5 +20,5 @@ output "storage_container_name" {
 
 output "index_blob_url" {
   description = "The URL of the index.html blob."
-  value       = "${azurerm_storage_account.blob_storage.primary_web_endpoint}${azurerm_storage_container.container.name}/index.html"
+  value       = "${azurerm_storage_account.blob_storage.primary_web_endpoint}${azurerm_storage_container.container.name}/${var.index_document}"
 }
