@@ -2,21 +2,17 @@
 
 Welcome to my walkthrough series for the [Cloud Resume Challenge](https://cloudresumechallenge.dev/). 
 
-This series provides a comprehensive, step-by-step guide for setting up and configuring a fully functional static website hosted on Azure Blob Storage, along with a Linux Azure Virtual Machine (VM) serving a simple Flask API.
+This repoistory contains all files that I wrote on my way of taking the challenge, including static the website, Python Flask API, Terraform modules, GitHub Actions workflow, and more.  
 
-In this project, all resources are provisioned using Terraform, implementing IaC (Infrastructure as Code) strategies. Additionally, the static website is automatically updated through a GitHub Actions workflow, which triggers on every push to the repository, demonstrating a seamless CI/CD pipeline.
+In this project, all resources are provisioned using Terraform, implementing IaC (Infrastructure as Code) strategies. Additionally, the static website is automatically updated through a GitHub Actions CI/CD pipeline, which triggers on every push to the repository.
 
-This initiative is a part of my DevOps portfolio intended to demonstrate the skills I've developed in cloud infrastructure management, automation, and continuous integration and deployment methodologies.
+Technologies used:
+- Terraform for automatic cloud provisioning
+- Azure Blob Storage for deploying the static website
+- Azure Linux VM for deploying Flask API
+- GitHub Actions workflow for the CI/CD pipeline that automatically updates the contnent of the static website as soon as HTML or CSS files in this repository change.
 
-##### Series overview
-
-This walkthrough consists of three parts:
-
-1. [🖉CRC Part 1: Hosting a static website on Azure Blob Storage](https://github.com/0xtr1gger/cloud_resume_challenge/blob/main/walkthrough/Part_1_Hosting_a_static_website_on_Azure_Blob_Storage.md)
-2. 🖉CRC Path 2: Configuring a GitHub Actions workflow
-3. 🖉CRC Part 3: Creating an Azure VM for the API
-
-Happy reading and coding! 
+This initiative is a part of my DevOps portfolio intended to demonstrate the skills I've developed in cloud infrastructure management, automation, IaC, and CI/CD.
 
 >**Important note:**
 >Please be aware that this repository does not include my actual resume or any Azure Terraform provider configurations. It serves as a sanitized version of a private repository originally created for the challenge, with all personal and sensitive information removed. However, all code and documentation included in this repository are actual and accurately reflect the efforts and methodologies I applied during the project.
