@@ -1,0 +1,60 @@
+name: Static website deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - main
+
+permissions:
+  id-token: write # Request write permissions for id-token
+  contents: read  # Allow read access to the repository contents
+
+
+env:
+  ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
+  ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+  ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+
+jobs:
+  terraform:
+    
+    name: Deploy static website on Azure Blob Storage
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash   
+
+    steps:
+    # Checkout the repository to the runner
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Print environment variables
+      run: echo $AZURE_CLIENT_ID
+
+ 
+    # Login to Azure
+    - name: Login to Azure using Service Principal
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        allow-no-subscriptions: true
+
+    - run: az group list
+
+
+    # Install the latest version of Terraform CLI to the Ubuntu runner
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.10.2
+
+
+    # Initialize the Terraform working directory
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./example
+    
