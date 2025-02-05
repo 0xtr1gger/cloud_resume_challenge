@@ -1,0 +1,74 @@
+name: Static website deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths: ['src/static/**']
+
+permissions:
+  id-token: write
+  contents: read  # allow read access to the repository contents
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+
+jobs:
+  terraform:
+    
+    name: Deploy static website on Azure Blob Storage
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash 
+        working-directory: ./example  
+
+    steps:
+    # checkout the repository to the runner
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # login to Azure
+    - name: Login to Azure using Service Principal
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDS }}
+
+    # install the latest version of Terraform CLI to the Ubuntu runner
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.10.2
+
+    # initialize the Terraform working directory
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./example
+      env:
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
+        ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+    
+
+    # checks that all Terraform configuration files adhere to a canonical format
+    # will fail the build if not
+    - name: Terraform Format
+      run: terraform fmt -check
+
+    # validate Terraform configuration
+    - name: Terraform validate
+      run: terraform validate
+
+    # generate an execution plan
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+      
+    # apply the changes
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
