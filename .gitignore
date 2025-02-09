@@ -1,4 +1,6 @@
 
+**/*.db
+
 ## Terraform ##
 
 # source: https://github.com/github/gitignore/blob/main/Terraform.gitignore
