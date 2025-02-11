@@ -1,0 +1,56 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for api-setup
+
+- name: Install packages
+  package:
+    name:
+      - python3-pip
+      - sqlite3
+      - docker.io
+    state: present
+
+#- name: Start and enable Docker service
+#  service:
+#    name: docker
+#    state: started
+#    enabled: true
+
+- name: Create the Docker group
+  group:
+    name: docker
+    state: present
+
+
+- name: Add Ansible user to the docker group
+  user:
+    name: "{{ ansible_user_name }}"
+    groups: docker
+    append: true
+    
+
+- name: Debug app_directory
+  debug:
+    var: api_directory
+
+- name: Create a directory for the API code
+  file:
+    path: "{{ api_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: Download Docker image for the API server
+  shell: docker pull {{ api_docker_image }}:{{ image_version }}
+#  community.docker.docker_image: 
+#    name: "{{ api_docker_image }}"
+#    tag: "{{ image_version }}"
+#    source: pull
+
+- name: Start the API server container
+  shell: docker run -d -p 80:5000 -v db-volume:{{ api_directory }}/visitor_counter.db --name api_server {{ api_docker_image }}:{{ image_version }}
+
+#  docker_container:
+#    name: api_server
+#    image: "{{ api_docker_image }}:{{ image_version }}"
+#    state: started
+    

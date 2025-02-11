@@ -30,6 +30,24 @@ a:hover {
 
 }
 
+#counter {
+    background-color: #0f1013;
+    color: #B2CFFF;
+    position: fixed;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+    border-radius: 0.5rem;
+    border: solid 1px #B2CFFF;
+    
+    
+    h1 {font-size: 25px; font-family: "Tektur";}
+    button {background-color: rgba(0, 0, 0, 0); color: #B2CFFF; border: solid 1px #B2CFFF;}
+}
+
 .container-fluid {
     padding: 30px;
     border: 1px solid white;
