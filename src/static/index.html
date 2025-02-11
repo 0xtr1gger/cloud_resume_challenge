@@ -15,9 +15,16 @@
 
 <body>
 
-<div class="container-fluid" id="resume">
+
+<div id="counter">
+    <div><h1>Visitor Counter: <span id="visitor-counter">0</span></h1></div>
+    <!--<button>x</button>-->
+</div>
     
 
+<div class="container-fluid" id="resume">
+    
+    
     <div class="row header-row">
         <div class="header-container col-md">
             <h1 class="name">NAME SURNAME</h1>
@@ -159,4 +166,63 @@
     </div>
 
 </div>
+
+
+<script>
+let visitor_counter = document.getElementById('visitor-counter');
+
+// function that fetches the visitor counter
+async function get_visitor_counter() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/visit');
+        const data = await response.json();
+        console.log(data.visitor_counter);
+        visitor_counter.textContent = `${data.visitor_counter}`;
+    } catch (error) {
+        console.error(error);	
+        API_error();
+    }
+}
+
+// function that fetches the visitor counter without incrementing it
+async function fetch_visitor_counter() {
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/fetch');
+        const data = await response.json();
+        console.log(data.visitor_counter);
+        visitor_counter.textContent = `${data.visitor_counter}`;
+    
+    } catch (error) {
+        console.error(error);
+        API_error();
+    }
+
+}
+
+function API_error(){
+        let counter_panel = document.getElementById('visitor-counter');
+        counter_panel.textContent = 'The visitor counter API is currently turned off.';
+
+}
+
+// function that checks if this session has already incremented the counter
+function check_visitor_counter(){
+    const has_visited = sessionStorage.getItem('hasVisited');
+    
+    if (!has_visited) {
+        // if the user hasn't visited this page during this session, increment the counter
+        get_visitor_counter();
+        // set a flag in session storage to indicate that the user has visited the page
+        sessionStorage.setItem('hasVisited', 'true');
+    } else {
+        // if the user has already visited this page during this session, only retrieve the current counter value
+        fetch_visitor_counter();
+    }
+}
+
+
+
+check_visitor_counter();
+</script>
 </body>
