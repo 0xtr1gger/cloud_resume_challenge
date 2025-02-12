@@ -1,0 +1,26 @@
+services:
+  api:
+    image: 0xtr1gger/visitor_counter_api:v0.3
+    ports: 
+      - "5000:5000"
+    depends_on: 
+      - mongo
+    networks: 
+      - app-network
+  
+
+  mongo:
+    image: mongo:latest
+    ports: 
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks: 
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks: 
+  app-network:
+    driver: bridge
