@@ -1,8 +1,8 @@
 services:
   api:
-    image: 0xtr1gger/visitor_counter_api:v0.3
+    image: 0xtr1gger/visitor_counter_api:v1.0
     ports: 
-      - "5000:5000"
+      - "80:5000"
     depends_on: 
       - mongo
     networks: 

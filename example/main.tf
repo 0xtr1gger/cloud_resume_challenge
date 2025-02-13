@@ -13,9 +13,9 @@ module "website_module" {
 
 }
 
-module "vm_module" {
-  source              = "../modules/azure-api-server"
-  resource_group_name = "rg-cloud-resume-example-vm"
-  rg_location         = "East Asia"
-  vm_hostname         = "cloudresumeapi"
-}
+#module "vm_module" {
+#  source              = "../modules/azure-api-server"
+#  resource_group_name = "rg-cloud-resume-example-vm"
+#  rg_location         = "East Asia"
+#  vm_hostname         = "cloudresumeapi"
+#}
