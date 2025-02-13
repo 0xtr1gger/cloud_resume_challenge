@@ -98,7 +98,7 @@ resource "azurerm_linux_virtual_machine" "api_vm" {
   }
   admin_ssh_key {
     username   = var.vm_admin_username
-    public_key = azapi_resource_action.ssh_public_key_gen.output.publicKey
+    public_key = file(var.ssh_public_key_file)
   }
 
 }

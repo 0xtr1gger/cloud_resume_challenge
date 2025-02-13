@@ -7,5 +7,5 @@ api_directory: '/usr/src/app'
 ansible_user_name: 'ansible'
 
 api_docker_image: '0xtr1gger/visitor_counter_api'
-image_version: 'v0.1'
+image_version: 'v1.0'
 
