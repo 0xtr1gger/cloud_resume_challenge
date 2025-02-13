@@ -16,11 +16,16 @@ variable "vm_admin_username" {
   default     = "ansible"
 }
 
+variable "ssh_public_key_file" {
+  type = string
+  description = "Path to the SSH public key file."
+  default = "~/.ssh/id_rsa.pub"
+}
+
 variable "vm_hostname" {
   type        = string
   description = "Hostname for the Azure VM"
   default     = "hostname"
-
 }
 
 variable "vnet_config" {
