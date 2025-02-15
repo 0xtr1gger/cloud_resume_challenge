@@ -1,19 +1,20 @@
-# Azure Blob Storage Static Website  
+# Terraform module for deploying a static website on Azure Blob Storage
 
-This Terraform module provisions a static website hosted on Azure Blob Storage. It creates an Azure resource group, storage account, storage container, then loads blobs for HTML and CSS files and deploys a static website within the container.
+This Terraform module is used to automate the provisioning and deployment of a static website on Azure Blob storage. It creates an Azure resource group, Blob storage account, and storage container, then uploads blobs for static files for the website into the storage container as Blbos. The website is configured to be publicly accessible. 
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.0 |
+No requirements.
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.0 |
+
+## Modules
+
+No modules.
 
 ## Resources
 
@@ -22,8 +23,7 @@ This Terraform module provisions a static website hosted on Azure Blob Storage. 
 | [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
 | [azurerm_storage_account.blob_storage](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account) | resource |
 | [azurerm_storage_account_static_website.static_website](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_account_static_website) | resource |
-| [azurerm_storage_blob.index_blob](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
-| [azurerm_storage_blob.styles_blob](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
+| [azurerm_storage_blob.blobs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_blob) | resource |
 | [azurerm_storage_container.container](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/storage_container) | resource |
 
 ## Inputs
@@ -49,15 +49,3 @@ This Terraform module provisions a static website hosted on Azure Blob Storage. 
 | <a name="output_storage_account_name"></a> [storage\_account\_name](#output\_storage\_account\_name) | The name of the Azure Storage Account. |
 | <a name="output_storage_account_primary_web_endpoint"></a> [storage\_account\_primary\_web\_endpoint](#output\_storage\_account\_primary\_web\_endpoint) | The primary web endpoint for the static website. |
 | <a name="output_storage_container_name"></a> [storage\_container\_name](#output\_storage\_container\_name) | The name of the storage container for static files. |
-
-## Example
-
-```
-module "azure_static_website" {
-    source               = "./modules/static-website"
-    storage_account_name = "unique_storage_account_name" # required
-    resource_group_name  = "custom-resource-group-name"
-    rg_location          = "West US"
-    # other input variables ...
-}
-```
