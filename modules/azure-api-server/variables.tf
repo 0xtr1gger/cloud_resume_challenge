@@ -169,8 +169,6 @@ variable "vm_config" {
   default = {
     name = "api_vm"
     size = "Standard_B2ts_v2"
-    # computer_hostname = "apihostname"
-    # admin_username = "ansible"
 
     os_disk = {
       name                 = "api_vm_os_disk"
