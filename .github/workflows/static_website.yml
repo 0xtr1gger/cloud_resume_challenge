@@ -26,7 +26,7 @@ jobs:
     defaults:
       run:
         shell: bash 
-        working-directory: ./example  
+        working-directory: ./examples/static_website
 
     steps:
     # checkout the repository to the runner
@@ -48,7 +48,7 @@ jobs:
     # initialize the Terraform working directory
     - name: Terraform Init
       run: terraform init
-      working-directory: ./example
+      working-directory: ./examples/static_website
       env:
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
         ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
