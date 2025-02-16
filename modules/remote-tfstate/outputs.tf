@@ -13,7 +13,8 @@ output "storage_container_name" {
   value       = azurerm_storage_container.terraform_state.name
 }
 
-output "index_blob_url" {
+output "state_file_url" {
   description = "The URL of the remote Terraform state file."
   value       = "${azurerm_storage_account.blob_storage.primary_web_endpoint}${azurerm_storage_container.terraform_state.name}/terraform.tfstate"
 }
+

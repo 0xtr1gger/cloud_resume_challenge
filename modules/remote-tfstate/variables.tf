@@ -26,3 +26,9 @@ variable "storage_account_replication_type" {
   description = "The replication type for the storage account."
   default     = "LRS"
 }
+
+variable "tfstate_container_name" {
+  type        = string
+  description = "The name for the storage container for Terraform state files"
+  default     = "terraform-state"
+}
