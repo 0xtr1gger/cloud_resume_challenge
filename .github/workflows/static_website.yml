@@ -21,6 +21,7 @@ jobs:
     
     name: Deploy static website on Azure Blob Storage
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     defaults:
       run:

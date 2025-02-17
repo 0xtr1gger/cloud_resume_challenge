@@ -1,4 +1,4 @@
-name: API server CI/CD pipeline
+name: Set up Flask API on Azure VM 
 
 on:
   workflow_dispatch:
@@ -6,11 +6,19 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     defaults:
       run:
         shell: bash 
         working-directory: ./examples/api_vm
+    
+    env:
+      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+
 
     steps:
       - name: Checkout Code
@@ -28,18 +36,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        env:
-          ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-          ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
       # checks that all Terraform configuration files adhere to a canonical format
       # will fail the build if not
       - name: Terraform Format
         run: terraform fmt -check
 
-      - name: Terraform validate
+      - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform Plan
@@ -58,7 +61,9 @@ jobs:
           path: inventory.ini
 
   ansible:
+    needs: terraform
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     defaults:
       run:
@@ -85,7 +90,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y ansible
-
 
       - name: Run Ansible playbook
         env: 

@@ -12,8 +12,8 @@ permissions:
 
 jobs:
   build-docker-containers:
-    timeout-minutes: 30
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     defaults:
       run:
@@ -48,3 +48,8 @@ jobs:
           context: ./src/api-server/app
           push: true
           tags: "${{ github.actor }}/visitor_counter_api:${{ steps.commit_hash.outputs.TAG }}"
+
+      - name: Update Docker Compose file with a new image tag
+        run: |
+          IMAGE_TAG=${{ steps.commit_hash.outputs.TAG }}
+          sed -i "s|${{ github.actor }}/visitor_counter_api:.*|${{ github.actor }}/visitor_counter_api:${IMAGE_TAG}|" docker-compose.yml
