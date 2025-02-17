@@ -1,0 +1,94 @@
+name: API server CI/CD pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash 
+        working-directory: ./examples/api_vm
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure using Service Principal
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDS }}
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.2
+
+      - name: Terraform Init
+        run: terraform init
+        env:
+          ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}" 
+          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+          ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+
+      # checks that all Terraform configuration files adhere to a canonical format
+      # will fail the build if not
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+
+      - name: Save VM public IP
+        run: terraform output -raw public_ip_address > inventory.ini
+
+      - name: Upload inventory.ini
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory
+          path: inventory.ini
+
+  ansible:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash 
+        working-directory: .
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          echo "{{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Download inventory.ini artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: inventory
+
+      - name: Install Ansible
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+
+
+      - name: Run Ansible playbook
+        env: 
+          ANSIBLE_USER: ansible
+        run: |
+          ansible-playbook -i inventory.ini playbook.yml --private-key private_key.pem

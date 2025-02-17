@@ -1,0 +1,50 @@
+name: Build Docker containers for visitor counter API
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - src/api-server/api/**
+
+permissions:
+  contents: read
+
+jobs:
+  build-docker-containers:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash 
+        working-directory: ./src/api-server/app
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Extract Git commit hash
+        id: commit_hash
+        run: echo "TAG=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Debug working directory
+        run: pwd && ls -l
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./src/api-server/app
+          push: true
+          tags: "${{ github.actor }}/visitor_counter_api:${{ steps.commit_hash.outputs.TAG }}"
