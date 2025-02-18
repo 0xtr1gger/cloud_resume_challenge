@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 3.0"
     }
+    random = {
+      source = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
   backend "azurerm" {
     resource_group_name  = "rg-cloud-resume-example"

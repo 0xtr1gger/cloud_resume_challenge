@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: inventory
-          path: inventory.ini
+          path: ./examples/api_vm/inventory.ini
 
   ansible:
     needs: terraform
@@ -75,15 +75,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up SSH
-        run: |
-          echo "{{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-
       - name: Download inventory.ini artifact
         uses: actions/download-artifact@v4
         with:
           name: inventory
+
+      - name: Add VM to known_hosts
+        run: |
+          mkdir -p /home/runner/.ssh
+          touch /home/runner/.ssh/known_hosts
+          VM_IP=$(cat inventory.ini)
+          ssh-keyscan -t rsa -H $VM_IP >> ~/.ssh/known_hosts
+
+
+      - name: Set up SSH private key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/id_rsa
+          chmod 600 /home/runner/.ssh/id_rsa
 
       - name: Install Ansible
         shell: bash
@@ -95,4 +103,4 @@ jobs:
         env: 
           ANSIBLE_USER: ansible
         run: |
-          ansible-playbook -i inventory.ini playbook.yml --private-key private_key.pem
+          ansible-playbook -i inventory.ini -e 'ansible_user=ansible' playbook.yml
