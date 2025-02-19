@@ -2,13 +2,14 @@
 ---
 # tasks file for api-setup
 
-- name: Install packages
+- name: Install sqlite3
   package:
-    name:
-      - sqlite3
-      - docker.io
-      - docker-compose
+    name: sqlite3
     state: present
+
+- name: Install Docker and Docker Compose
+  import_tasks:
+    file: ./install_docker.yml
 
 - name: Start and enable Docker service
   service:
@@ -26,7 +27,6 @@
     name: "{{ ansible_user_name }}"
     groups: docker
     append: true
-    
 
 - name: Debug app_directory
   debug:
