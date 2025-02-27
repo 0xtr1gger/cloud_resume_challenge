@@ -2,11 +2,6 @@
 ---
 # tasks file for api-setup
 
-- name: Install sqlite3
-  package:
-    name: sqlite3
-    state: present
-
 - name: Install Docker and Docker Compose
   import_tasks:
     file: ./install_docker.yml
