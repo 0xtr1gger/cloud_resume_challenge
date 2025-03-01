@@ -1,0 +1,17 @@
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Create the Docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add Ansible user to the docker group
+  user:
+    name: "{{ ansible_user_name }}"
+    groups: docker
+    append: true

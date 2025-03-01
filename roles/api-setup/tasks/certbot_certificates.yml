@@ -1,0 +1,18 @@
+- name: Check if certificates already exists
+  ansible.builtin.stat:
+    path: /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem
+  register: cert_file
+
+- name: Obtain a TLS certificate with Certbot (only if they don't exist)
+  ansible.builtin.command: certbot --nginx --agree-tos --non-interactive --email {{ email_address }} -d {{ domain_name }}
+  when: not cert_file.stat.exists
+  notify:
+    - Reload Nginx
+
+- name: Add cron job to renew the certificate if configured
+  ansible.builtin.cron:
+    name: TLS certificate renewal
+    job: "certbot renew --quiet"
+    minute: "{{ certbot_auto_renew_minute }}" # "1"
+    hour: "{{ certbot_auto_renew_hour }}" # "*/12"
+    user: "{{ certbot_auto_renew_user }}"

@@ -1,3 +1,9 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # handlers file for api-setup
+
+- name: Reload Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reload
+    

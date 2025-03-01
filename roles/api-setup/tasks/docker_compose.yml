@@ -1,0 +1,25 @@
+- name: Debug app_directory
+  ansible.builtin.debug:
+    var: api_directory
+
+- name: Create a directory for the API code
+  ansible.builtin.file:
+    path: "{{ api_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: Fetch the docker-compose.yml from GitHub
+  ansible.builtin.get_url:
+    url: "{{ compose_file_url }}"
+    dest: "{{ api_directory }}/docker-compose.yml"
+    mode: '0644'
+
+- name: Tear down existing services
+  community.docker.docker_compose_v2:
+    project_src: flask
+    state: absent
+
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_directory }}"
+  # register: output

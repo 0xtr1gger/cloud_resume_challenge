@@ -1,11 +1,25 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # defaults file for api-setup
 
-api_directory: '/usr/src/app'
-
+# application
 ansible_user_name: 'ansible'
-
+api_directory: '/app'
+compose_file_url: 'https://raw.githubusercontent.com/0xtr1gger/cloud_resume_challenge/refs/heads/main/src/api-server/docker-compose.yml'
 api_docker_image: '0xtr1gger/visitor_counter_api'
 image_version: 'v1.0'
 
+# whether to set up certificates and on what ports to listen
+listen_80: true  # listen on port 80 or not
+listen_443: true # listen on port 443 or not
+set_up_tls: true # configure TLS certificates (HTTPS) or not
+
+domain_name: api.cloudbee.run.place.
+nginx_proxy_pass: http://localhost:5000 # where the API is exposed
+
+email_address: johndoe@example.com
+certbot_auto_renew_minute: '1'
+certbot_auto_renew_hour: '*/12'
+certbot_auto_renew_user: 'ansible'
+
+certbot_auto_renew_options: '--quiet'

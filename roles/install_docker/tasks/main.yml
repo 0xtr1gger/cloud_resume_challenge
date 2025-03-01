@@ -1,0 +1,9 @@
+# tasks file for api-setup
+
+- name: Install Docker
+  import_tasks:
+    file: ./install_docker.yml
+
+- name: Configure Docker
+  import_tasks:
+    file: ./config_docker.yml

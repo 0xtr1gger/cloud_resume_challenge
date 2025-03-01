@@ -1,48 +1,29 @@
-#SPDX-License-Identifier: MIT-0
+# SPDX-License-Identifier: MIT-0
 ---
 # tasks file for api-setup
 
-- name: Install Docker and Docker Compose
-  import_tasks:
-    file: ./install_docker.yml
+## docker compose
 
-- name: Start and enable Docker service
-  service:
-    name: docker
-    state: started
-    enabled: true
+- name: Start containers with Docker Compose
+  ansible.builtin.import_tasks:
+    file: docker_compose.yml
 
-- name: Create the Docker group
-  group:
-    name: docker
-    state: present
+## nginx
 
-- name: Add Ansible user to the docker group
-  user:
-    name: "{{ ansible_user_name }}"
-    groups: docker
-    append: true
+- name: Install Nginx
+  ansible.builtin.import_tasks:
+    file: install_nginx.yml
 
-- name: Debug app_directory
-  debug:
-    var: api_directory
+- name: Generate Nginx configuration
+  ansible.builtin.import_tasks:
+    file: configure_nginx.yml
 
-- name: Create a directory for the API code
-  file:
-    path: "{{ api_directory }}"
-    state: directory
-    mode: '0755'
+## certbot
 
-- name: Fetch the docker-compose.yml from GitHub
-  get_url:
-    url: https://raw.githubusercontent.com/0xtr1gger/cloud_resume_challenge/refs/heads/main/src/api-server/docker-compose.yml
-    dest: "{{ api_directory }}/docker-compose.yml"    
+- name: Install Certbot
+  ansible.builtin.import_tasks:
+    file: install_certbot.yml
 
-- name: Ensure previous Docker containers are down
-  shell: docker-compose -f {{ api_directory }}/docker-compose.yml down
-
-- name: Ensure no containers are left
-  shell: docker container prune --force
-
-- name: Start services with docker-compose up
-  shell: docker-compose -f {{ api_directory }}/docker-compose.yml up -d 
+- name: Set up TLS certificates
+  ansible.builtin.import_tasks:
+    file: certbot_certificates.yml
