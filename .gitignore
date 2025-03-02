@@ -345,4 +345,6 @@ test/units/.coverage.*
 changelogs/.plugin-cache.yaml
 .ansible-test-timeout.json
 
+.ansible/**
+
 roles/api-setup/vars/main.yml
