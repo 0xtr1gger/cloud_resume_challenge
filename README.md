@@ -16,8 +16,9 @@ Technologies used:
 - Grafana
 
 The structure of the project:
+![cover](https://github.com/user-attachments/assets/25ea1746-3b42-4962-b3a7-6b45f91aa8ac)
 
-![[cover.png]]
+
 
 This repository contains files and configurations that I created on my way of taking the challenge. 
 This includes:
