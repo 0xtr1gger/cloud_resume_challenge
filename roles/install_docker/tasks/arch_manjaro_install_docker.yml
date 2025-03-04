@@ -1,0 +1,15 @@
+- name: Update system
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+
+- name: Install Docker
+  community.general.pacman:
+    name:
+      - docker
+      - docker-compose
+    state: present
+
+- name: Verify installation by running the hello-world image
+  ansible.builtin.command:
+    cmd: docker run hello-world

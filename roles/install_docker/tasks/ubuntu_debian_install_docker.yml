@@ -1,0 +1,55 @@
+---
+# sudo apt-get update
+- name: Update and upgrade apt
+  ansible.builtin.apt:
+    upgrade: true
+    update_cache: true
+    cache_valid_time: 86400 # one day
+
+# sudo apt-get install ca-certificates curl gnupg
+- name: Install packages needed to install Docker
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+# sudo install -m 0755 -d /etc/apt/keyrings
+- name: Add Docker’s official GPG key directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755' 
+
+# sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+- name: Download Docker's official GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.gpg
+    mode: '0644' # sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /etc/apt/sources.list.d/docker.list.save
+
+- name: Add Docker stable repository
+  ansible.builtin.command:
+    cmd: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
+  args:
+    creates: /etc/apt/sources.list.d/docker.list
+
+# sudo apt-get update
+- name: Update apt package index again
+  ansible.builtin.apt:
+    update_cache: true
+
+# sudo apt-get install docker docker-compose
+- name: Install Docker
+  ansible.builtin.apt:
+    name:
+      - docker
+      - docker-compose
+
+- name: Verify installation by running the hello-world image
+  ansible.builtin.command:
+    cmd: docker run hello-world
+    

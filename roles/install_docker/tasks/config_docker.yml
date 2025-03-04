@@ -1,17 +1,24 @@
-
 - name: Start and enable Docker service
-  service:
+  ansible.builtin.service:
     name: docker
     state: started
     enabled: true
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+
+- name: Start and enable Docker service
+  ansible.builtin.systemd_service:
+    name: docker
+    state: started
+    enabled: true
+  when: ansible_distribution in ["Arch", "Manjaro"]
 
 - name: Create the Docker group
-  group:
+  ansible.builtin.group:
     name: docker
     state: present
 
 - name: Add Ansible user to the docker group
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user_name }}"
     groups: docker
     append: true
