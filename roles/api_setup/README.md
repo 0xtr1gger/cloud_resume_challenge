@@ -44,7 +44,7 @@ Including an example of how to use your role (for instance, with variables passe
  hosts: all  
  become: yes  
  roles:  
-   - role: api-setup
+   - role: api_setup
      domain_name: 'example.com'
      email_address: 'johndoe@example.com'
 ```

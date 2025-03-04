@@ -4,4 +4,4 @@
   become: yes
   roles:
     - install_docker
-    - api-setup
+    - api_setup
