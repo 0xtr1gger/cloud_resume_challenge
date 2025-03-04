@@ -14,7 +14,7 @@ listen_80: true  # listen on port 80 or not
 listen_443: true # listen on port 443 or not
 set_up_tls: true # configure TLS certificates (HTTPS) or not
 
-domain_name: api.cloudbee.run.place.
+domain_name: example.com
 nginx_proxy_pass: http://localhost:5000 # where the API is exposed
 
 email_address: johndoe@example.com
