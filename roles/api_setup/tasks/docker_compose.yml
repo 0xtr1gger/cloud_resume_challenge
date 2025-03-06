@@ -16,10 +16,10 @@
 
 - name: Tear down existing services
   community.docker.docker_compose_v2:
-    project_src: flask
+    project_src: "{{ api_directory }}"
     state: absent
 
 - name: Create and start services
   community.docker.docker_compose_v2:
     project_src: "{{ app_directory }}"
-  # register: output
+

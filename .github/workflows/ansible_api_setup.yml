@@ -5,7 +5,6 @@ on:
 
 jobs:
   ansible:
-    needs: terraform
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -19,16 +18,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Download inventory.ini artifact
-        uses: actions/download-artifact@v4
+#      - name: Download inventory.ini artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: inventory
+#          path: ./examples/api_vm/inventory.ini
+
+      - name: Restore inventory.ini from cache
+        uses: actions/cache@v4
         with:
-          name: inventory
+          path: ./examples/api_vm/inventory.ini
+          key: inventory-ini
 
       - name: Add VM to known_hosts
         run: |
           mkdir -p /home/runner/.ssh
           touch /home/runner/.ssh/known_hosts
-          VM_IP=$(cat inventory.ini)
+          VM_IP=$(cat ./examples/api_vm/inventory.ini)
           ssh-keyscan -t rsa -H $VM_IP >> ~/.ssh/known_hosts
 
 
@@ -47,4 +53,4 @@ jobs:
         env: 
           ANSIBLE_USER: ansible
         run: |
-          ansible-playbook -i inventory.ini -e 'ansible_user=ansible' playbook.yml
+          ansible-playbook -i ./examples/api_vm/inventory.ini -e 'ansible_user=ansible' playbook.yml

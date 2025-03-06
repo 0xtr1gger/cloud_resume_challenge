@@ -1,0 +1,7 @@
+- name: Add cron job to renew the certificate if configured
+  ansible.builtin.cron:
+    name: Certbot automatic certificate renewal
+    job: "certbot renew {{ certbot_auto_renew_options }}"
+    minute: "{{ certbot_auto_renew_minute }}" # "1"
+    hour: "{{ certbot_auto_renew_hour }}" # "*/12"
+    user: "{{ certbot_auto_renew_user }}"

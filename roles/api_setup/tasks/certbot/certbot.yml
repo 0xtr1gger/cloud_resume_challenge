@@ -1,0 +1,18 @@
+# 1. Install certbot and python3-certbot-nginx packages
+
+- name: Install Certbot
+  ansible.builtin.import_tasks:
+    file: install_certbot.yml
+
+# 1. Check if the certificates already exists
+# 2. If no certificates have been found, obtain a TLS certificate with Certbot
+
+- name: Set up TLS certificates # Let's Encrypt
+  ansible.builtin.import_tasks:
+    file: certbot_certificates.yml
+
+# 1. Configure Certbot auto-renew Cron job
+
+- name: Set up a Cron job for Cerbot certificate auto-renew
+  ansible.builtin.import_tasks:
+    file: certbot_cron.yml

@@ -20,13 +20,14 @@ Role Variables
 | `image_version`             | The tag of the Docker image to use.                                            | `v1.0`                                                                                                                   |
 | `listen_80`                 | Whether to listen on port `80` or not.                                         | `true`                                                                                                                   |
 | `listen_443`                | Whether to listen on port `443` or not.                                        | `true`                                                                                                                   |
-| `set_up_tls`                | Whether to configure TLS certificates for HTTPS.                               | `true`                                                                                                                   |
+| `set_up_tls`                | Whether to configure TLS certificates for HTTPS. If false, `email_address` and `certbot_*` variables do not take effect.                                | `true`                                                                                                                   |
 | `domain_name`               | The domain name to be used for the API.                                        | `example.com`                                                                                                            |
 | `nginx_proxy_pass`          | The location where the API is exposed for the Nginx proxy.                     | `'http://localhost:5000'`                                                                                                |
 | `email_address`             | The email address to be used for Certbot.                                      | `johndoe@example.com`                                                                                                    |
 | `certbot_auto_renew_minute` | The minute at which Certbot auto-renewal will run (cron job).                  | `'1'`                                                                                                                    |
 | `certbot_auto_renew_hour`   | The hour at which Certbot auto-renewal will run (cron job).                    | `*/12`                                                                                                                   |
-| `certbot_auto_renew_user`   | The user under which Certbot will perform auto-renewal.                        | `ansible`                                                                                                                |
+| `certbot_auto_renew_user`   | The user under which Certbot will perform auto-renewal (cron job).                        | `ansible`                                                                                                                |
+| `certbot_auto_renew_options` | The options to the Certbot certificate renewal command (cron job). | `--quiet` | 
 
 Dependencies
 ------------

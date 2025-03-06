@@ -4,15 +4,27 @@
 
 ## docker compose
 
+# 1. Create directory for the project inside the VM
+# 2. Fetch docker_compose.yml from GitHub
+# 3. Tear down existing services
+# 4. Create and start services specified in the fetched docker_compose.yml
+
 - name: Start containers with Docker Compose
   ansible.builtin.import_tasks:
     file: docker_compose.yml
 
 ## nginx
 
+# 1. Install Nginx
+# 2. Start Nginx service
+
 - name: Install Nginx
   ansible.builtin.import_tasks:
     file: install_nginx.yml
+
+# 1. Generate configuration file from the nginx.conf.j2 template
+# 2. Test configuration with nginx -t
+# 3. Restart Nginx
 
 - name: Generate Nginx configuration
   ansible.builtin.import_tasks:
@@ -20,10 +32,14 @@
 
 ## certbot
 
-- name: Install Certbot
-  ansible.builtin.import_tasks:
-    file: install_certbot.yml
+# everything related to certbot and certificates
 
-- name: Set up TLS certificates
+# 1. Install certbot and python3-certbot-nginx packages
+# 2. Check if the certificates already exists
+# 3. If no certificates have been found, obtain a TLS certificate with Certbot
+# 4. Configure Certbot auto-renew Cron job
+
+- name: Install Certbot and configure certificates
   ansible.builtin.import_tasks:
-    file: certbot_certificates.yml
+    file: certbot.yml
+  when: set_up_tls is true # applies to every task invoked by this file

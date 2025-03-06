@@ -8,11 +8,3 @@
   when: not cert_file.stat.exists
   notify:
     - Reload Nginx
-
-- name: Add cron job to renew the certificate if configured
-  ansible.builtin.cron:
-    name: TLS certificate renewal
-    job: "certbot renew --quiet"
-    minute: "{{ certbot_auto_renew_minute }}" # "1"
-    hour: "{{ certbot_auto_renew_hour }}" # "*/12"
-    user: "{{ certbot_auto_renew_user }}"
