@@ -58,10 +58,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: inventory
-          path: ./inventory.ini
-
-      - name: Cache inventory.ini
-        uses: actions/cache@v4
-        with:
-          path: ./inventory.ini
-          key: inventory-ini
+          path: examples/api_vm/inventory.ini
