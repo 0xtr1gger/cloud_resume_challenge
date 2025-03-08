@@ -1,11 +1,12 @@
 # SPDX-License-Identifier: MIT-0
 ---
 # defaults file for api-setup
+ansible_python_interpreter: /usr/bin/python3.10
 
 # application
 ansible_user_name: 'ansible'
 api_directory: '/app'
-compose_file_url: 'https://raw.githubusercontent.com/0xtr1gger/cloud_resume_challenge/refs/heads/main/src/api-server/docker-compose.yml'
+compose_file_url: 'https://raw.githubusercontent.com/0xtr1gger/cloud_resume_challenge/refs/heads/main/docker-compose.yml'
 api_docker_image: '0xtr1gger/visitor_counter_api'
 image_version: 'v1.0'
 

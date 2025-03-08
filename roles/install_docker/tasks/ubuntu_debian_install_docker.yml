@@ -20,12 +20,12 @@
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755' 
+    mode: '0755'
 
 # sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 - name: Download Docker's official GPG key
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/ubuntu/gpg
+  get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg 
     dest: /etc/apt/keyrings/docker.gpg
     mode: '0644' # sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
@@ -52,4 +52,4 @@
 - name: Verify installation by running the hello-world image
   ansible.builtin.command:
     cmd: docker run hello-world
-    
+  changed_when: false

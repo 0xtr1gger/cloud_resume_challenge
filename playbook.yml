@@ -5,4 +5,5 @@
   roles:
     - install_docker
     - role: api_setup
+      listen_443: false
       set_up_tls: false

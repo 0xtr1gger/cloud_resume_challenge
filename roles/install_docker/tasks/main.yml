@@ -8,6 +8,11 @@
     file: ./ubuntu_debian_install_docker.yml
   when: ansible_distribution in ["Ubuntu", "Debian"]
 
+- name: Install Docker Compose on Debian/Ubuntu
+  ansible.builtin.import_tasks:
+    file: ./ubuntu_debian_install_compose.yml
+  when: ansible_distribution in ["Ubuntu", "Debian"]
+
 - name: Install Docker on Arch/Manjaro
   ansible.builtin.import_tasks:
     file: ./arch_manjaro_install_docker.yml

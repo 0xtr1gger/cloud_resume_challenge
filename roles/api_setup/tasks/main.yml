@@ -20,7 +20,7 @@
 
 - name: Install Nginx
   ansible.builtin.import_tasks:
-    file: install_nginx.yml
+    file: nginx/install_nginx.yml
 
 # 1. Generate configuration file from the nginx.conf.j2 template
 # 2. Test configuration with nginx -t
@@ -28,7 +28,7 @@
 
 - name: Generate Nginx configuration
   ansible.builtin.import_tasks:
-    file: configure_nginx.yml
+    file: nginx/configure_nginx.yml
 
 ## certbot
 
@@ -41,5 +41,5 @@
 
 - name: Install Certbot and configure certificates
   ansible.builtin.import_tasks:
-    file: certbot.yml
+    file: certbot/certbot.yml
   when: set_up_tls is true # applies to every task invoked by this file

@@ -14,12 +14,21 @@
     dest: "{{ api_directory }}/docker-compose.yml"
     mode: '0644'
 
-- name: Tear down existing services
-  community.docker.docker_compose_v2:
-    project_src: "{{ api_directory }}"
-    state: absent
+- name: Ensure no containers are running and remove them
+  command: docker-compose -f /{{ api_directory }}/docker-compose.yml down
+  register: result_down
+  changed_when: "'Removing' in result_down.stdout"
 
-- name: Create and start services
-  community.docker.docker_compose_v2:
-    project_src: "{{ app_directory }}"
+- name: Create and start Docker Compose services
+  command: docker-compose up -f /{{ api_directory }}/docker-compose.yml -d
+  register: result_up
+  changed_when: "'Creating' in result_up.stdout or 'Starting' in result_up.stdout or 'Recreating' in result_up.stdout"
 
+#- name: Tear down existing services
+#  community.docker.docker_compose_v2:
+#    project_src: "{{ api_directory }}"
+#    state: absent
+
+#- name: Create and start services
+#  community.docker.docker_compose_v2:
+#    project_src: "{{ app_directory }}"

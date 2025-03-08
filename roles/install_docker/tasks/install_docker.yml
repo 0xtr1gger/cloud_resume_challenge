@@ -25,17 +25,28 @@
 # sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 - name: Download Docker's official GPG key
   get_url:
-    url: https://download.docker.com/linux/ubuntu/gpg 
-    dest: /etc/apt/keyrings/docker.gpg
-    mode: '0644' # sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644' # sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 # echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /etc/apt/sources.list.d/docker.list.save
 
 - name: Add Docker stable repository
-  ansible.builtin.command:
-    cmd: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
-  args:
-    creates: /etc/apt/sources.list.d/docker.list
+  ansible.builtin.shell: |
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list
+    
+#- name: Add Docker stable repository
+#  ansible.builtin.command:
+#    cmd: echo \
+#      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+#      $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+#      sudo tee /etc/apt/sources.list.d/docker.list
+#    # cmd: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
+#  args:
+#    creates: /etc/apt/sources.list.d/docker.list
 
 # sudo apt-get update
 - name: Update apt package index again
@@ -52,3 +63,11 @@
 - name: Verify installation by running the hello-world image
   command:
     cmd: docker run hello-world
+  changed_when: false
+
+# sudo apt-get update
+- name: Update and upgrade apt
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 # one day

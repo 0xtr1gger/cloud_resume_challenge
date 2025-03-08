@@ -1,1 +1,2 @@
 ansible_user_name: ansible
+ansible_python_interpreter: /usr/bin/python3.10
